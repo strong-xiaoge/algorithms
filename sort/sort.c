@@ -122,9 +122,31 @@ void shellSort(int*const start,const int size){
  * start : 数组的起始指针
  * size  : 待排序的数组大小
 */
+#include <stdlib.h>
+#include <string.h>
 void mergeSort(int*const start,const int size){
-    if(start==NULL)return;
-    
+    if(start==NULL||size<=0)return;
+    int*temp=malloc(sizeof(int)*size);
+    int step=1;
+    while(step<size){
+        for(int i=0;i<size-step;i+=2*step){
+            //内部排序
+            int index=0;
+            int i1=i,i2=i+step;
+            int i_end=i+2*step;
+            if(i_end>size)i_end=size;
+            while(i1<i+step&&i2<i_end){
+                if(start[i1]<=start[i2])
+                    temp[index++]=start[i1++];
+                else temp[index++]=start[i2++];
+            }
+            if(i1<i+step)memcpy(temp+index,start+i1,(i+step-i1)*sizeof(int));
+            if(i2<i_end)memcpy(temp+index,start+i2,(i_end-i2)*sizeof(int));
+            memcpy(start+i,temp,(i_end-i)*sizeof(int));
+        }
+        step *= 2;
+    }
+    free(temp);
 }
 
 /**
@@ -132,9 +154,31 @@ void mergeSort(int*const start,const int size){
  * start : 数组的起始指针
  * size  : 待排序的数组大小
 */
+//维护大顶堆
+void heapify(int*const start,const int size){
+    int parent=0;
+    int child=parent*2+1;
+    while(child<size){
+        if(child+1<size&&start[child]<start[child+1])++child;
+        if(start[parent]>start[child])return;
+        int temp=start[parent];
+        start[parent]=start[child];
+        start[child]=temp;
+        parent=child;
+        child=parent*2+1;
+    }
+}
 void heapSort(int*const start,const int size){
     if(start==NULL)return;
-    
+    //建堆
+    for(int i=size/2-1;i>=0;--i)heapify(start+i,size-i);
+    //排序
+    for(int i=size-1;i>=0;--i){
+        int temp=start[i];
+        start[i]=start[0];
+        start[0]=temp;
+        heapify(start,i);
+    }
 }
 
 /**
@@ -203,6 +247,15 @@ void bucketSort(int*const start,const int size){
         }
     }
     /**释放内存**/
+    for(int i=0;i<bucketnum;++i){
+        struct pag*head=buckets[i].next;
+        while(head){
+            struct pag*node=head;
+            head=head->next;
+            free(node);
+        }
+    }
+    free(buckets);
 }
 
 /**
@@ -211,9 +264,33 @@ void bucketSort(int*const start,const int size){
  * size  : 待排序的数组大小
 */
 void redixSort(int*const start,const int size){
-    if(start==NULL)return;
-    
+    if(start==NULL||size<=0)return;
+    int count[20][size+1];
+    int mod=10;
+    int flag=0;
+    while(1){
+        //初始化
+        for(int i=0;i<20;++i)count[i][0]=0;
+        //计数
+        for(int i=0;i<size;++i){
+            int bit=(start[i]/(mod/10))%mod+10;
+            if(bit!=10)flag=1;
+            ++count[bit][0];
+            count[bit][count[bit][0]]=start[i];
+        }
+        if(!flag)break;
+        flag=0;
+        //排序
+        int index=0;
+        for(int j=0;j<20;++j){
+            for(int i=1;i<=count[j][0];++i){
+                start[index++]=count[j][i];
+            }
+        }
+        mod *= 10;
+    }
 }
+
 
 #include <stdio.h>
 int main(){
@@ -235,10 +312,9 @@ int main(){
         case 9:bucketSort(data,size);printf("bucketSort...\n");break;
         case 10:redixSort(data,size);printf("redixSort...\n");break;
     }
-
     for(int i=0;i<size;++i)
         printf("%d ",data[i]);
     printf("\n");
-    getchar();
+    // getchar();
     return 0;
 }
