@@ -1,0 +1,1 @@
+g++   -std=c++11 -march=native -O3 -pthread  -rdynamic CMakeFiles/threadpool.dir/src/ThreadPool.cpp.o  -o ../bin/threadpool   -L/mnt/c/Users/qq181/Documents/C++/Thread-Pool/lib 

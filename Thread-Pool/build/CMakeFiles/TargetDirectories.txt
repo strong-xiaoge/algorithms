@@ -1,0 +1,3 @@
+/mnt/c/Users/qq181/Documents/C++/Thread-Pool/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/qq181/Documents/C++/Thread-Pool/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/qq181/Documents/C++/Thread-Pool/build/CMakeFiles/threadpool.dir

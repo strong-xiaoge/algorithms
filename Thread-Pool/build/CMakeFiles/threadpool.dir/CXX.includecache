@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../inc/ThreadPool.h
+vector
+-
+queue
+-
+mutex
+-
+condition_variable
+-
+future
+-
+thread
+-
+functional
+-
+
+/mnt/c/Users/qq181/Documents/C++/Thread-Pool/src/ThreadPool.cpp
+ThreadPool.h
+/mnt/c/Users/qq181/Documents/C++/Thread-Pool/src/ThreadPool.h
+stdexcept
+-
+iostream
+-
+
